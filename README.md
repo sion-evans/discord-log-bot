@@ -1,4 +1,4 @@
-# discord-logger-bot
+# Discord Log Bot
 
 A simple Discord bot written in Python. 
 
