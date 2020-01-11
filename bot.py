@@ -33,7 +33,8 @@ async def on_member_join(member):
         try:
             channel = client.get_channel(x)
             await channel.send(f'{member.name} joined the server.')
-        except:
+        except Exception as error:
+            print("Error: ", error)
             config["channel"].remove(x)
 
 @client.event
@@ -42,7 +43,32 @@ async def on_member_remove(member):
         try:
             channel = client.get_channel(x)
             await channel.send(f'{member.name} left the server.')
-        except:
+        except Exception as error:
+            print("Error: ", error)
             config["channel"].remove(x)
+
+@client.event
+async def on_member_update(before, after):
+    if before.nick != after.nick:
+        for x in config["channel"]:
+            try:
+                channel = client.get_channel(x)
+                if after.nick is not None:
+                    await channel.send(f'{before.name} changed their nickname to {after.nick}.')
+                else:
+                    await channel.send(f'{before.name} removed their nickname.')
+            except Exception as error:
+                print("Error: ", error)
+                config["channel"].remove(x)
+
+@client.event
+async def on_voice_state_update(member, before, after):
+    if before.channel is None and after.channel is not None:
+        print(f'{member.name} joined {after.channel.name}.')
+    elif after.channel is None and before.channel is not None:
+        print(f'{member.name} left {before.channel.name}.')
+    elif before.channel is not None and after.channel is not None:
+        if before.channel.id != after.channel.id:
+            print(f'{member.name} moved to {after.channel.name}.')
 
 client.run(config["token"])
