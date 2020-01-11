@@ -54,9 +54,9 @@ async def on_member_update(before, after):
             try:
                 channel = client.get_channel(x)
                 if after.nick is not None:
-                    await channel.send(f'{before.name} changed their nickname to {after.nick}.')
+                    await channel.send(f'{before.name} changed his/her nickname to {after.nick}.')
                 else:
-                    await channel.send(f'{before.name} removed their nickname.')
+                    await channel.send(f'{before.name} removed his/her nickname.')
             except Exception as error:
                 print("Error: ", error)
                 config["channel"].remove(x)
